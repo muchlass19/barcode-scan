@@ -9,6 +9,7 @@ use App\Models\JadwalPelajaran;
 use Carbon\Carbon;
 use App\Exports\RekapAbsenExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Absensi;
 
 class JadwalGuruController extends Controller
 {
@@ -17,40 +18,14 @@ class JadwalGuruController extends Controller
         $guru = Auth::guard('guru')->user();
         $nip = $guru->nip;
 
-        $jadwalGuru = JadwalPelajaran::with(['kelas'])
-                ->where('guru_nip', $nip)
-                ->select('kelas_id')
-                ->distinct()
-                ->get();
+        $jadwalGuru = JadwalPelajaran::with(['kelas', 'mataPelajaran', 'guru'])
+            ->where('guru_nip', $nip)
+            ->get()
+            ->groupBy(function ($item) {
+                return $item->mataPelajaran->nama_mata_pelajaran . '-' . $item->kelas->nama_kelas;
+            });
 
         return view('guru.jadwal.index', compact('jadwalGuru', 'guru'));
-    }
-
-    public function index2()
-    {
-        // pengecekan hari
-        $hariInggris = strtolower(Carbon::now()->format('l'));
-
-        $hariIndonesia = [
-            'monday'    => 'senin',
-            'tuesday'   => 'selasa',
-            'wednesday' => 'rabu',
-            'thursday'  => 'kamis',
-            'friday'    => 'jumat',
-            'saturday'  => 'sabtu',
-            'sunday'    => 'minggu',
-        ];
-
-        $hariIni = $hariIndonesia[$hariInggris];
-        $tanggalSekarang = Carbon::today()->format('d-m-Y');
-
-        $nip = Auth::guard('guru')->user()->nip;
-        $jadwalGuru = JadwalPelajaran::with(['kelas', 'mataPelajaran'])
-            ->where('guru_nip', $nip)
-            ->where('hari', $hariIni)
-            ->get();
-
-        return view('guru.jadwal.index', compact('jadwalGuru', 'tanggalSekarang'));
     }
 
     public function show()
@@ -69,6 +44,16 @@ class JadwalGuruController extends Controller
 
     public function export()
     {
+        $nip = Auth::guard('guru')->user()->nip;
+
+        $hasData = Absensi::whereHas('pertemuan.jadwalPelajaran', function ($q) use ($nip) {
+            $q->where('guru_nip', $nip);
+        })->exists();
+
+        if(!$hasData) {
+            return redirect()->back()->with('error', 'Data absensi masih kosong. Tidak ada data yang bisa diekspor');
+        }
+
         return Excel::download(new RekapAbsenExport, 'rekap-absensi.xlsx');
     }
 }

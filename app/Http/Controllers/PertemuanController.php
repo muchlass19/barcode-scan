@@ -109,8 +109,17 @@ class PertemuanController extends Controller
     public function show()
     {
         $jadwalIds = session('jadwal_ids');
+
+        if(!$jadwalIds || empty($jadwalIds)) {
+            return redirect()->route('guru.jadwal.index')->with('error', 'Silakan pilih jadwal terlebih dahulu');
+        }
+
         $jadwalPertemuan = Pertemuan::whereIn('jadwal_pelajaran_id', $jadwalIds)->get();
+
+        $infoJadwal = JadwalPelajaran::with(['kelas', 'mataPelajaran'])
+            ->where('id', $jadwalIds)
+            ->first();
         
-        return view('guru.pertemuan.detail', compact('jadwalPertemuan'));
+        return view('guru.pertemuan.detail', compact('jadwalPertemuan', 'infoJadwal'));
     }
 }

@@ -5,14 +5,14 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="page-title-box d-md-flex justify-content-md-between align-items-center">
-                    <h4 class="page-title">Dashboard Admin</h4>
+                    <h4 class="page-title">Dashboard Pertemuan</h4>
                     <div class="">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item"><a href="#">Guru</a></li>
                             <li class="breadcrumb-item"><a href="#">Absen</a></li>
                             <li class="breadcrumb-item"><a href="#">Detail</a></li>
-                            <li class="breadcrumb-item"><a href="#">XI IPA 2</a></li>
-                            <li class="breadcrumb-item active">Bahasa Indonesia</li>
+                            <li class="breadcrumb-item"><a href="#">{{ $infoJadwal->kelas->nama_kelas }}</a></li>
+                            <li class="breadcrumb-item active">{{ $infoJadwal->mataPelajaran->nama_mata_pelajaran }}</li>
                         </ol>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h4 class="card-title">Jadwal XI IPA 2 - Bahasa Indonesia</h4>
+                                <h4 class="card-title">Pertemuan {{ $infoJadwal->kelas->nama_kelas }} - {{ $infoJadwal->mataPelajaran->nama_mata_pelajaran }}</h4>
                             </div>
                         </div>
                     </div>
