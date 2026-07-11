@@ -1,0 +1,30 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+class AdminSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        DB::table('admin')->insert([
+            [
+                'nip' => '1990010112345678',
+                'nama_lengkap' => 'Admin Utama',
+                'password' => Hash::make('admin123'),
+            ],
+            [
+                'nip' => '1992020198765432',
+                'nama_lengkap' => 'Admin Sekolah',
+                'password' => Hash::make('admin123'),
+            ],
+        ]);
+    }
+}

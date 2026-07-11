@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class Guru extends Authenticatable
+{
+    use HasFactory;
+
+    protected $table = 'guru';
+    protected $primaryKey = 'nip';
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $fillable = [
+        'nip',
+        'nama_lengkap',
+        'password'
+    ];
+}
