@@ -65,14 +65,27 @@ class DashboardController extends Controller
         // persentase absen semua mata pelajaran
         // jumlah absen / jumlah pertemuan semua mapel * 100
         $nisn = Auth::guard('siswa')->user()->nisn;
-        $totalAbsen = Absensi::where('siswa_nisn', $nisn)->count();
+
         $kelasSiswa = KelasSiswa::where('siswa_nisn', $nisn)->first();
-        $jadwalPelajaranIds = JadwalPelajaran::where('kelas_id', $kelasSiswa->kelas_id)->pluck('id')->toArray();
+
+        if (!$kelasSiswa) {
+            $persentaseKehadiran = 0;
+            $persentaseAbsen = 0;
+            return view('siswa.index', compact('persentaseKehadiran', 'persentaseAbsen'));
+        }
+
+        $jadwalPelajaranIds = JadwalPelajaran::where('kelas_id', $kelasSiswa->kelas_id)->pluck('id');
         $totalPertemuan = Pertemuan::whereIn('jadwal_pelajaran_id', $jadwalPelajaranIds)->count();
+        $totalHadir = Absensi::where('siswa_nisn', $nisn)
+            ->count();
 
-        $persentaseKehadiran = ($totalAbsen / $totalPertemuan) * 100;
+        if ($totalPertemuan > 0) {
+            $persentaseKehadiran = round(($totalHadir / $totalPertemuan) * 100, 2);
+        } else {
+            $persentaseKehadiran = 0; 
+        }
+
         $persentaseAbsen = 100 - $persentaseKehadiran;
-
         return view('siswa.index', compact('persentaseKehadiran', 'persentaseAbsen'));
     }
 }
