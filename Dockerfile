@@ -22,7 +22,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install -vvv
 
 EXPOSE 8000
 
