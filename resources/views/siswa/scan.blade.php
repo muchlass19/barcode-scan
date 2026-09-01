@@ -33,6 +33,9 @@ document.addEventListener("DOMContentLoaded", function () {
             // Start kamera belakang (jika tersedia)
             // let cameraId = cameras.length > 1 ? cameras[1].id : cameras[0].id;
             let cameraId = cameras[0].id;
+            if(cameras[1].id) {
+                cameraId = cameras[1].id
+            }
 
             html5QrCode.start(
                 cameraId,
