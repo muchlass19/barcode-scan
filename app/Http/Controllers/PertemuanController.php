@@ -69,7 +69,7 @@ class PertemuanController extends Controller
             'jadwal_pelajaran_id' => $jadwal->id,
             'tanggal'             => $tanggal,
             'token_qr'            => $token,
-            'expired_at'          => now()->addHours(1),
+            'expired_at'          => Carbon::today()->setTimeFromTimeString($jadwal->jam_selesai),
         ]);
 
         return redirect()
