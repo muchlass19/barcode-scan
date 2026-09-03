@@ -48,6 +48,14 @@ class PertemuanController extends Controller
         }
 
         // --------------------------------------------------------------------
+        // Cek apakah jam selesai jadwal hari ini sudah lewat
+        // --------------------------------------------------------------------
+        $jamSelesai = Carbon::today()->setTimeFromTimeString($jadwal->jam_selesai);
+        if ($jamSelesai->isPast()) {
+            return back()->with('error', 'Jam pelajaran sudah berakhir. Tidak bisa generate QR kehadiran lagi.');
+        }
+
+        // --------------------------------------------------------------------
         // Cek apakah pertemuan untuk jadwal & tanggal ini sudah ada
         // --------------------------------------------------------------------
         $pertemuan = Pertemuan::where('jadwal_pelajaran_id', $jadwal->id)
