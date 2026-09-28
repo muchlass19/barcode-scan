@@ -53,7 +53,7 @@ class DashboardController extends Controller
         $jadwalTerdekat = JadwalPelajaran::with(['kelas', 'mataPelajaran'])
             ->where('guru_nip', $nip)
             ->where('hari', $hariIni)
-            ->where('jam_selesai', '<=', $sekarang)
+            ->where('jam_selesai', '!=', $sekarang)
             ->orderBy('jam_mulai', 'asc')
             ->get();
 
