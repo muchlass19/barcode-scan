@@ -13,6 +13,7 @@ use App\Models\Siswa;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 /**
@@ -155,11 +156,67 @@ class TimezoneJakartaTest extends TestCase
         $pertemuan = Pertemuan::firstOrFail();
 
         $this->assertSame('2026-01-15', $pertemuan->tanggal);
-        $this->assertSame('2026-01-15 08:00:00', $pertemuan->expired_at);
+        // expired_at dibaca dari DB sebagai Carbon zona WIB, bukan UTC.
+        $this->assertSame('2026-01-15 08:00:00', $pertemuan->expired_at->format('Y-m-d H:i:s'));
+        $this->assertSame('Asia/Jakarta', $pertemuan->expired_at->getTimezone()->getName());
 
         $this->assertDatabaseHas('pertemuan', [
             'id' => $pertemuan->id,
             'tanggal' => '2026-01-15',
         ]);
+
+        $this->assertSame(
+            '2026-01-15 08:00:00',
+            DB::table('pertemuan')->where('id', $pertemuan->id)->value('expired_at'),
+            'Jam expired harus tersimpan apa adanya (waktu WIB) di kolom datetime.'
+        );
+    }
+
+    public function test_halaman_qr_menampilkan_jam_expired_wib(): void
+    {
+        // 00:30 WIB = 17:30 UTC hari sebelumnya. Kalau tampilannya ikut UTC,
+        // jam ini akan muncul sebagai 17:30.
+        $this->pertemuan->update(['expired_at' => '2026-01-15 00:30:00']);
+
+        $this->actingAs($this->guru, 'guru')
+            ->get(route('guru.absen.qr', $this->pertemuan->id))
+            ->assertOk()
+            ->assertSee('15 Januari 2026', false)
+            ->assertSee('00:30 WIB', false)
+            ->assertDontSee('17:30', false);
+    }
+
+    public function test_halaman_daftar_pertemuan_menampilkan_tanggal_wib(): void
+    {
+        $this->actingAs($this->guru, 'guru')
+            ->withSession([
+                'jadwal_ids' => [$this->jadwal->id],
+                'kelas_id' => $this->jadwal->kelas_id,
+            ])
+            ->get(route('guru.pertemuan.detail'))
+            ->assertOk()
+            ->assertSee('15 Januari 2026', false)
+            ->assertDontSee('2026-01-15 00:00:00', false);
+    }
+
+    public function test_dashboard_guru_menampilkan_jam_mulai_dan_selesai_wib(): void
+    {
+        Carbon::setTestNow(Carbon::create(2026, 1, 15, 0, 30, 0, 'Asia/Jakarta'));
+
+        $this->actingAs($this->guru, 'guru')
+            ->get(route('guru.index'))
+            ->assertOk()
+            ->assertSee('Jam Mulai (WIB)', false)
+            ->assertSee('Jam Selesai (WIB)', false)
+            ->assertSee('07:00', false)
+            ->assertSee('08:00', false);
+    }
+
+    public function test_jadwal_siswa_menampilkan_jam_wib(): void
+    {
+        $this->actingAs($this->siswa, 'siswa')
+            ->get(route('siswa.jadwal.index'))
+            ->assertOk()
+            ->assertSee('07:00 - 08:00 WIB', false);
     }
 }

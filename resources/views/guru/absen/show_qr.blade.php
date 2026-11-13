@@ -23,7 +23,7 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h4 class="card-title">Absen Mata Pelajaran {{ $pertemuan->jadwalPelajaran->mataPelajaran->nama_mata_pelajaran }} - {{ $pertemuan->tanggal }}</h4>
+                                <h4 class="card-title">Absen Mata Pelajaran {{ $pertemuan->jadwalPelajaran->mataPelajaran->nama_mata_pelajaran }} - {{ $pertemuan->tanggal_wib }}</h4>
                             </div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                                 {{ $qrCode }}
                             </div>
                             <div class="col-12 mt-4">
-                                <p class="text-sm">Barcode Expired pada <span class="fw-bold">{{ $pertemuan->expired_at }}</span></p>
+                                <p class="text-sm">Barcode Expired pada <span class="fw-bold">{{ $pertemuan->expired_at_wib }}</span></p>
                             </div>
                         </div>
 

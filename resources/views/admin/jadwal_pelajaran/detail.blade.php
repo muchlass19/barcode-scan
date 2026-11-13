@@ -58,7 +58,7 @@ $hariList = [
                             </a>
                         </h6>
                         <p class="text-muted mb-0">{{ $jadwal['guru'] }}</p>
-                        <small class="text-muted">{{ $jadwal['jam_mulai'] }} - {{ $jadwal['jam_selesai'] }}</small>
+                        <small class="text-muted">{{ $jadwal['jam_mulai_wib'] }} - {{ $jadwal['jam_selesai_wib'] }} WIB</small>
                     </div>
                     @empty
                     <div class="card-body pt-2">

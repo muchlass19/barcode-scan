@@ -39,8 +39,8 @@ class JadwalSiswaController extends Controller
                 'jadwal_id' => $jadwal->id,
                 'mata_pelajaran_id' => $jadwal->mataPelajaran->id,
                 'nama_mata_pelajaran' => $jadwal->mataPelajaran->nama_mata_pelajaran,
-                'jam_mulai' => $jadwal->jam_mulai,
-                'jam_selesai' => $jadwal->jam_selesai,
+                'jam_mulai' => $jadwal->jam_mulai_wib,
+                'jam_selesai' => $jadwal->jam_selesai_wib,
                 'guru' => $jadwal->guru->nama_lengkap,
                 'guru_nip' => $jadwal->guru->nip
             ];
@@ -73,7 +73,7 @@ class JadwalSiswaController extends Controller
 
             return [
                 'pertemuan_id' => $pertemuan->id,
-                'tanggal' => $pertemuan->tanggal,
+                'tanggal' => $pertemuan->tanggal_wib,
                 'hadir' => $absen ? (bool) $absen->status_kehadiran : false
             ];
         });

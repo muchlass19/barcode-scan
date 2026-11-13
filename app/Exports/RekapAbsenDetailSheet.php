@@ -32,13 +32,13 @@ class RekapAbsenDetailSheet implements FromCollection, ShouldAutoSize, WithHeadi
     {
         return [
             'No',
-            'Tanggal',
+            'Tanggal (WIB)',
             'Kelas',
             'Mata Pelajaran',
             'NISN',
             'Nama Siswa',
             'Status',
-            'Jam Scan',
+            'Jam Scan (WIB)',
             'Keterangan',
         ];
     }

@@ -265,7 +265,7 @@ class RekapAbsenExportTest extends TestCase
 
             $detail = $spreadsheet->getSheet(0)->toArray();
             $this->assertSame(
-                ['No', 'Tanggal', 'Kelas', 'Mata Pelajaran', 'NISN', 'Nama Siswa', 'Status', 'Jam Scan', 'Keterangan'],
+                ['No', 'Tanggal (WIB)', 'Kelas', 'Mata Pelajaran', 'NISN', 'Nama Siswa', 'Status', 'Jam Scan (WIB)', 'Keterangan'],
                 $detail[0]
             );
             $this->assertCount(5, $detail, '1 baris heading + 4 baris siswa/pertemuan.');

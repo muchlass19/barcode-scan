@@ -64,6 +64,8 @@ class JadwalPelajaranController extends Controller
                 'nama_mata_pelajaran' => $jadwal->mataPelajaran->nama_mata_pelajaran,
                 'jam_mulai' => $jadwal->jam_mulai,
                 'jam_selesai' => $jadwal->jam_selesai,
+                'jam_mulai_wib' => $jadwal->jam_mulai_wib,
+                'jam_selesai_wib' => $jadwal->jam_selesai_wib,
                 'guru' => $jadwal->guru->nama_lengkap,
                 'guru_nip' => $jadwal->guru->nip
             ];

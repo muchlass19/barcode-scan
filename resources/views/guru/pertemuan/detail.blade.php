@@ -42,7 +42,7 @@
                                 <tbody>
                                     @forelse($jadwalPertemuan as $pertemuan)
                                     <tr>
-                                        <td>{{ $pertemuan->tanggal }}</td>
+                                        <td>{{ $pertemuan->tanggal_wib }}</td>
                                         <td class="d-flex gap-2">
                                             <a href="{{ route('guru.absen.manual', $pertemuan->id) }}" class="btn btn-primary btn-sm">Detail Absen</a>
                                         </td>

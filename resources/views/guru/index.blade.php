@@ -31,8 +31,8 @@
                         <div class="row fw-bold mb-2">
                             <div class="col">Nama Kelas</div>
                             <div class="col">Nama Mata Pelajaran</div>
-                            <div class="col">Jam Mulai</div>
-                            <div class="col">Jam Selesai</div>
+                            <div class="col">Jam Mulai (WIB)</div>
+                            <div class="col">Jam Selesai (WIB)</div>
                         </div>
                         @foreach($jadwalTerdekat as $jadwal)
                         <div class="row mb-2">
@@ -43,10 +43,10 @@
                                 {{ $jadwal->mataPelajaran->nama_mata_pelajaran }}
                             </div>
                             <div class="col">
-                                {{ $jadwal->jam_mulai }}
+                                {{ $jadwal->jam_mulai_wib }}
                             </div>
                             <div class="col">
-                                {{ $jadwal->jam_selesai }}
+                                {{ $jadwal->jam_selesai_wib }}
                             </div>
                         </div>
                         @endforeach
