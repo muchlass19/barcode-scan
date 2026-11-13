@@ -9,7 +9,7 @@ use App\Models\JadwalPelajaran;
 use Carbon\Carbon;
 use App\Exports\RekapAbsenExport;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Models\Absensi;
+use App\Models\Pertemuan;
 
 class JadwalGuruController extends Controller
 {
@@ -46,14 +46,14 @@ class JadwalGuruController extends Controller
     {
         $nip = Auth::guard('guru')->user()->nip;
 
-        $hasData = Absensi::whereHas('pertemuan.jadwalPelajaran', function ($q) use ($nip) {
+        $adaPertemuan = Pertemuan::whereHas('jadwalPelajaran', function ($q) use ($nip) {
             $q->where('guru_nip', $nip);
         })->exists();
 
-        if(!$hasData) {
-            return redirect()->back()->with('error', 'Data absensi masih kosong. Tidak ada data yang bisa diekspor');
+        if (!$adaPertemuan) {
+            return redirect()->back()->with('error', 'Belum ada pertemuan yang bisa direkap. Tidak ada data yang bisa diekspor');
         }
 
-        return Excel::download(new RekapAbsenExport, 'rekap-absensi.xlsx');
+        return Excel::download(new RekapAbsenExport($nip), 'rekap-absensi.xlsx');
     }
 }

@@ -1,5 +1,8 @@
 FROM php:8.3-apache
 
+# Zona waktu container = WIB (GMT+7); disamakan dengan config('app.timezone')
+ENV TZ=Asia/Jakarta
+
 WORKDIR /var/www/html
 
 # Install Node.js (wajib buat nge-build CSS/JS Laravel Vite)
@@ -16,9 +19,11 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
+    tzdata \
     nodejs \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring zip intl bcmath gd
+    && docker-php-ext-install pdo_mysql mbstring zip intl bcmath gd \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN a2enmod rewrite
 

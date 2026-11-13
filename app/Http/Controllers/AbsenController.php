@@ -78,11 +78,10 @@ class AbsenController extends Controller
 
         $pertemuanId = $request->pertemuan_id;
 
-        // tanggal hari ini
+        // tanggal & jam WIB (GMT+7) mengikuti config('app.timezone')
         $tanggal = Carbon::today()->toDateString();
 
-        // Waktu scan WIB
-        $waktuScan = Carbon::now()->addHours(7);
+        $waktuScan = Carbon::now()->toTimeString();
 
         $isAbsen = $request->is_absen;
 
@@ -120,6 +119,7 @@ class AbsenController extends Controller
         $pertemuanId = $request->pertemuan_id;
         $token = $request->token;
 
+        // tanggal & jam WIB (GMT+7) mengikuti config('app.timezone')
         $tanggal = Carbon::today()->toDateString();
         $waktuScan = Carbon::now()->toTimeString();
 
